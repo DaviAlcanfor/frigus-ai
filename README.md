@@ -1,13 +1,6 @@
 <div align="center">
 
-```
-███████╗██████╗ ██╗ ██████╗ ██╗   ██╗███████╗    █████╗ ██╗
-██╔════╝██╔══██╗██║██╔════╝ ██║   ██║██╔════╝  ██╔══██╗██║
-█████╗  ██████╔╝██║██║  ███╗██║   ██║███████╗  ███████║██║
-██╔══╝  ██╔══██╗██║██║   ██║██║   ██║╚════██║  ██╔══██║██║
-██║     ██║  ██║██║╚██████╔╝╚██████╔╝███████║  ██║  ██║██║
-╚═╝     ╚═╝  ╚═╝╚═╝ ╚═════╝  ╚═════╝ ╚══════╝  ╚═╝  ╚═╝╚═╝
-```
+# Frigus.AI
 
 Assistente multi-agente do app **Frigus** — gestão de alimentos, receitas, compras e finanças domésticas.
 Construído com LangChain + LangGraph, RAG (FAISS), guardrails e um agente juiz (LLM-as-judge).
@@ -46,6 +39,10 @@ diretamente ao usuário.
 ---
 
 ## Grafo de agentes
+
+<div align="center">
+  <img src="assets/diagrama-agentes.png" alt="Diagrama do fluxo de agentes do Frigus.AI" width="720" />
+</div>
 
 ```mermaid
 flowchart LR
