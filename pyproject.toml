@@ -1,0 +1,34 @@
+[project]
+name = "frigus-ai"
+version = "0.1.0"
+description = "Chatbot multi-agente do Frigus — gestão de alimentos, receitas, compras e finanças domésticas (LangGraph + RAG)."
+requires-python = ">=3.13"
+dependencies = [
+    # LLM / agentes / grafo
+    "langchain>=1.2",
+    "langchain-core>=1.4",
+    "langchain-anthropic>=1.4",
+    "langchain-google-genai>=4.2",
+    "langchain-groq>=1.1",
+    "langchain-community>=0.4",
+    "langchain-text-splitters>=1.1",
+    "langgraph>=1.1",
+
+    # RAG (FAQ)
+    "faiss-cpu>=1.14",
+    "pypdf>=6.0",
+
+    # Persistência
+    "psycopg2-binary>=2.9",
+    "pymongo>=4.17",
+
+    # Config / utilitários
+    "pydantic>=2.13",
+    "pydantic-settings>=2.14",
+    "python-dotenv>=1.2",
+    "rich>=15.0",
+    "pyfiglet>=1.0.4",
+]
+
+[tool.setuptools.packages.find]
+include = ["agents*", "graph*", "tools*", "config*", "ui*"]

@@ -1,0 +1,71 @@
+import subprocess
+import atexit
+import time
+
+from config.logging import get_logger
+
+
+logger = get_logger("docker")
+
+# Serviços definidos em docker-compose.yml: postgres, mongo
+COMPOSE_FILE = "docker-compose.yml"
+
+
+def _garantir_daemon():
+
+    resultado = subprocess.run(
+        ["docker", "info"],
+        capture_output=True
+    )
+
+    if resultado.returncode == 0:
+        return
+
+    logger.info("Subindo Docker Desktop...")
+    subprocess.Popen(["C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe"])
+
+    for _ in range(30):
+        time.sleep(3)
+
+        check = subprocess.run(["docker", "info"], capture_output=True)
+        if check.returncode == 0:
+            logger.info("Docker Desktop pronto.")
+            return
+
+    raise RuntimeError("Docker Desktop não respondeu após 90 segundos.")
+
+
+def _encerrar_servicos():
+
+    logger.info("Encerrando serviços do docker-compose (%s)...", COMPOSE_FILE)
+    subprocess.run(["docker", "compose", "-f", COMPOSE_FILE, "stop"], check=True)
+    logger.info("Serviços encerrados.")
+
+
+def garantir_banco() -> None:
+    """
+    Sobe (se necessário) os serviços do docker-compose: postgres, mongo.
+    Registra o encerramento automático quando o processo terminar.
+    """
+
+    _garantir_daemon()
+
+    resultado = subprocess.run(
+        ["docker", "compose", "-f", COMPOSE_FILE, "ps", "--status", "running", "--services"],
+        capture_output=True,
+        text=True
+    )
+
+    servicos_rodando = set(resultado.stdout.split())
+    servicos_esperados = {"postgres", "mongo"}
+
+    if servicos_esperados.issubset(servicos_rodando):
+        logger.info("Todos os serviços já estão rodando.")
+        return
+
+    logger.info("Subindo serviços via docker compose...")
+    subprocess.run(["docker", "compose", "-f", COMPOSE_FILE, "up", "-d"], check=True)
+    logger.info("Serviços prontos.")
+
+    # quando o app fecha, desliga os containers
+    atexit.register(_encerrar_servicos)
